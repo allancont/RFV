@@ -50,29 +50,29 @@ with header:
     st.markdown("---")
 
 with dataset:
-    with st.spinner('Carregando dados...'):
-        dados = get_data()
-        meses_dict = {'Jan': 1,'Feb': 2,'Mar': 3,'Apr': 4,'May': 5,'June': 6,'Jul': 7,'Aug': 8,'Sep': 9,'Oct': 10,'Nov': 11,'Dec': 12}
-        dados['DtEspecial'] = dados['SpecialDay'].apply(lambda x: 'Não' if x == 0 else 'Sim')
-        dados['Mes'] = dados['Month'].map(meses_dict).astype('int')
+    # with st.spinner('Carregando dados...'):
+    dados = get_data()
+    meses_dict = {'Jan': 1,'Feb': 2,'Mar': 3,'Apr': 4,'May': 5,'June': 6,'Jul': 7,'Aug': 8,'Sep': 9,'Oct': 10,'Nov': 11,'Dec': 12}
+    dados['DtEspecial'] = dados['SpecialDay'].apply(lambda x: 'Não' if x == 0 else 'Sim')
+    dados['Mes'] = dados['Month'].map(meses_dict).astype('int')
 
-        #Padronizando variáveis
-        var_pad1 = dados.select_dtypes(include="number")
-        var_pad2 = dados.select_dtypes(exclude="number")
-        colunas=var_pad1.columns.tolist()
-        scaler = StandardScaler(with_mean=True,with_std=True)
-        scaler.fit(var_pad1)
+    #Padronizando variáveis
+    var_pad1 = dados.select_dtypes(include="number")
+    var_pad2 = dados.select_dtypes(exclude="number")
+    colunas=var_pad1.columns.tolist()
+    scaler = StandardScaler(with_mean=True,with_std=True)
+    scaler.fit(var_pad1)
 
-        # Ajustando valores da escala
-        dados_pad = scaler.fit_transform(var_pad1)
-        dados_numpad = pd.DataFrame(dados_pad,columns=colunas)
-        dados_pad = pd.concat([dados_numpad,var_pad2],axis=1)
-        st.write(dados.head())
+    # Ajustando valores da escala
+    dados_pad = scaler.fit_transform(var_pad1)
+    dados_numpad = pd.DataFrame(dados_pad,columns=colunas)
+    dados_pad = pd.concat([dados_numpad,var_pad2],axis=1)
+    st.write(dados.head())
 
 with features:
-    with st.spinner('Gerando gráfico das variáveis...'):
-        fig = gerar_grafico(dados_pad)
-        st.markdown("---")
+    # with st.spinner('Gerando gráfico das variáveis...'):
+    fig = gerar_grafico(dados_pad)
+    st.markdown("---")
 
 with model_training:
     sel_col, disp_col = st.columns(2)
